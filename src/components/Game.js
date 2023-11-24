@@ -16,7 +16,8 @@ const Game = function() {
     ]
 
     let timeLimit = 60;
-    let hintPenalty = 5;
+    let hintPenalty = 15;
+    let wrongPenalty = 5;
     
     const [input, setInput] = useState("")
     //Contains some index within the list of prompts
@@ -34,10 +35,11 @@ const Game = function() {
         setTimer(timeLimit)
         setPrompt(Math.floor(Math.random() * prompts.length))
         setHint(false)
+        setInput('')
     }
 
     const handleInput = function() {
-        let guess = document.getElementById("userInput").value
+        let guess = document.getElementById("userInput").value.trim()
         setInput(guess)
         document.getElementById("userInput").value = ''
         //console.log(prompts[prompt].answer)
@@ -54,7 +56,8 @@ const Game = function() {
             setTimer(timeLimit)
             setHint(false)
         }
-        else{
+        else if(guess !== ''){
+            setTimer(timer-wrongPenalty)
             setCorrect(false)
         }
     }
@@ -80,14 +83,15 @@ const Game = function() {
     if(gameState==="running"){
         return (
             <div>
-                <p>{prompts[prompt].definition}</p>
+                <p>Definition: {prompts[prompt].definition}</p>
                 <p>Time Left: {timer}</p>
+                <label>Word: </label>
                 <input id="userInput"></input>
                 <button onClick={handleInput}>Submit</button>
                 <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>
-                {hint && <p>Hint: {prompts[prompt].hint}</p>}
+                {hint && <p>Hint: A synonym for the word is {prompts[prompt].hint}</p>}
                 {input !== '' && correct && <p>Correct</p>}
-                {input !== '' && !correct && <p>Incorrect</p>}
+                {input !== '' && !correct && <p>Incorrect (-{wrongPenalty} seconds)</p>}
             </div>
         )
     }
