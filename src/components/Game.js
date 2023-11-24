@@ -15,16 +15,17 @@ const Game = function() {
         hint: "quagmire"}
     ]
 
-    let timeLimit = 60;
+    let startingTime = 60;
     let hintPenalty = 15;
     let wrongPenalty = 5;
+    let correctReward = 10;
     
     const [input, setInput] = useState("")
     //Contains some index within the list of prompts
     const [prompt, setPrompt] = useState(Math.floor(Math.random() * prompts.length))
     //Boolean dependent on if the user got the answer right or not
     const [correct, setCorrect] = useState(false)
-    const [timer, setTimer] = useState(timeLimit)
+    const [timer, setTimer] = useState(startingTime)
     //State of the game (new, running, over)
     const [gameState, setGameState] = useState("new")
     //Boolean for whether or not to show the hint
@@ -32,7 +33,7 @@ const Game = function() {
 
     const start = function() {
         setGameState("running")
-        setTimer(timeLimit)
+        setTimer(startingTime)
         setPrompt(Math.floor(Math.random() * prompts.length))
         setHint(false)
         setInput('')
@@ -53,7 +54,7 @@ const Game = function() {
             }
             setPrompt(newPrompt)
             setCorrect(true)
-            setTimer(timeLimit)
+            setTimer(timer+correctReward)
             setHint(false)
         }
         else if(guess !== ''){
@@ -90,7 +91,7 @@ const Game = function() {
                 <button onClick={handleInput}>Submit</button>
                 <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>
                 {hint && <p>Hint: A synonym for the word is {prompts[prompt].hint}</p>}
-                {input !== '' && correct && <p>Correct</p>}
+                {input !== '' && correct && <p>Correct (+{correctReward} seconds)</p>}
                 {input !== '' && !correct && <p>Incorrect (-{wrongPenalty} seconds)</p>}
             </div>
         )
