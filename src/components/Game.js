@@ -5,14 +5,18 @@ const Game = function() {
     //Definitions gotten from Google
     const prompts = [
         {definition: "a piece of land surrounded by water",
-        answer: "island"},
+        answer: "island",
+        hint: "isle"},
         {definition: "a large area of flat land with few trees",
-        answer: "plain"},
+        answer: "plain",
+        hint: "grassland"},
         {definition: "an area of low-lying, uncultivated ground where water collects; a bog or marsh.",
-        answer: "swamp"}
+        answer: "swamp",
+        hint: "quagmire"}
     ]
 
     let timeLimit = 60;
+    let hintPenalty = 5;
     
     const [input, setInput] = useState("")
     //Contains some index within the list of prompts
@@ -22,11 +26,14 @@ const Game = function() {
     const [timer, setTimer] = useState(timeLimit)
     //State of the game (new, running, over)
     const [gameState, setGameState] = useState("new")
+    //Boolean for whether or not to show the hint
+    const [hint, setHint] = useState(false)
 
     const start = function() {
         setGameState("running")
         setTimer(timeLimit)
         setPrompt(Math.floor(Math.random() * prompts.length))
+        setHint(false)
     }
 
     const handleInput = function() {
@@ -45,9 +52,17 @@ const Game = function() {
             setPrompt(newPrompt)
             setCorrect(true)
             setTimer(timeLimit)
+            setHint(false)
         }
         else{
             setCorrect(false)
+        }
+    }
+
+    const showHint = function() {
+        if(!hint){
+            setTimer(timer-hintPenalty)
+            setHint(true)
         }
     }
 
@@ -69,6 +84,8 @@ const Game = function() {
                 <p>Time Left: {timer}</p>
                 <input id="userInput"></input>
                 <button onClick={handleInput}>Submit</button>
+                <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>
+                {hint && <p>Hint: {prompts[prompt].hint}</p>}
                 {input !== '' && correct && <p>Correct</p>}
                 {input !== '' && !correct && <p>Incorrect</p>}
             </div>
