@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 const Home = function() {
 
@@ -11,12 +11,15 @@ const Home = function() {
         {definition: "an area of low-lying, uncultivated ground where water collects; a bog or marsh.",
         answer: "swamp"}
     ]
+
+    let timeLimit = 60;
     
     const [input, setInput] = useState("")
     //Contains some index within the list of prompts
-    const [prompt, setPrompt] = useState(0)
+    const [prompt, setPrompt] = useState(Math.floor(Math.random() * prompts.length))
     //Boolean dependent on if the user got the answer right or not
     const [correct, setCorrect] = useState(false)
+    const [timer, setTimer] = useState(timeLimit)
 
     const handleInput = function() {
         let guess = document.getElementById("userInput").value
@@ -33,15 +36,25 @@ const Home = function() {
             }
             setPrompt(newPrompt)
             setCorrect(true)
+            setTimer(timeLimit)
         }
         else{
             setCorrect(false)
         }
     }
 
+    //Decrement the timer every second
+    useEffect(() => {
+        if(timer>0){
+            let updateTime = setInterval(function(){setTimer(timer-1)}, 1000);
+            return function(){clearInterval(updateTime)}
+        }
+    }, [timer]);
+
     return (
         <div>
             <p>{prompts[prompt].definition}</p>
+            <p>Time Left: {timer}</p>
             <input id="userInput"></input>
             <button onClick={handleInput}>Submit</button>
             {input !== '' && correct && <p>Correct</p>}
