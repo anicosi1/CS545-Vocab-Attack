@@ -29,6 +29,7 @@ const Game = function() {
     const [gameState, setGameState] = useState("new")
     //Boolean for whether or not to show the hint
     const [hint, setHint] = useState(false)
+    const [points, setPoints] = useState(0)
 
     const start = function() {
         setGameState("running")
@@ -36,6 +37,7 @@ const Game = function() {
         setPrompt(Math.floor(Math.random() * prompts.length))
         setHint(false)
         setInput('')
+        setPoints(0)
     }
 
     const handleInput = function() {
@@ -55,6 +57,7 @@ const Game = function() {
             setCorrect(true)
             setTimer(timeLimit)
             setHint(false)
+            setPoints(points+1)
         }
         else if(guess !== ''){
             setTimer(timer-wrongPenalty)
@@ -89,6 +92,7 @@ const Game = function() {
                 <input id="userInput"></input>
                 <button onClick={handleInput}>Submit</button>
                 <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>
+                <p>Points: {points}</p>
                 {hint && <p>Hint: A synonym for the word is {prompts[prompt].hint}</p>}
                 {input !== '' && correct && <p>Correct</p>}
                 {input !== '' && !correct && <p>Incorrect (-{wrongPenalty} seconds)</p>}
@@ -106,6 +110,7 @@ const Game = function() {
         return (
             <div>
                 <p>Game Over</p>
+                <p>You got {points} points.</p>
                 <button onClick={start}>Click to Play Again</button>
             </div>
         )
