@@ -110,7 +110,8 @@ const Game = function() {
         return (
             <div>
                 <p>Game Over</p>
-                <p>You got {points} points.</p>
+                {points !== 1 && <p>You got {points} points.</p>}
+                {points === 1 && <p>You got 1 point.</p>}
                 <button onClick={start}>Click to Play Again</button>
             </div>
         )
