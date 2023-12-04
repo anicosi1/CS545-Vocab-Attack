@@ -93,7 +93,7 @@ body, html, #root {
 }
 
 .text-input {
-    color: darkgrey;
+    color: black;
     padding: 12px 20px;
     border-radius: 10px;
     border: none;
@@ -136,4 +136,13 @@ button:hover {
 
 .hint-button:hover {
     background-color: rgb(180, 180, 180);
+}
+
+/* Start and End Screen Styling */
+
+.start-end-screen {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

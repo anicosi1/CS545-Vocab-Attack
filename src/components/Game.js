@@ -125,21 +125,20 @@ const Game = function() {
                 </>
             )}
             {gameState === "new" && (
-                <>
-                <p className='prompt-text'>Country Conjecture</p>
-                <p className='hint-text'>Guess as many words as you can in 60 seconds, based on the definitions</p>
-                <p className='hint-text'>If you: </p>
-                <p className='hint-text'>Guess incorrectly: </p>
-                <p className='hint-text'>Use a hint:</p>
-                <button onClick={start}>Click to Start</button>
-                </>
+                <div className="start-end-screen">
+                    <p className='prompt-text' style={{fontStyle: 'normal'}}>Country Conjecture</p>
+                    <p className='hint-text' style={{ fontWeight: 'bold', fontStyle: 'normal'}}>Guess as many words as you can in {timeLimit} seconds, based on the definitions</p>
+                    <p className='hint-text'>Guess incorrectly: -{wrongPenalty}</p>
+                    <p className='hint-text'>Use a hint: -{hintPenalty}</p>
+                    <button onClick={start}>Click to Start</button>
+                </div>
             )}
             {gameState === "over" && (
-                <>
+                <div className="start-end-screen">
                     <p className='prompt-text'>Game Over</p>
-                    <p className='hint-text'>You got {points} point{points !== 1 ? 's' : ''}.</p>
+                    <p className='hint-text' style={{ fontWeight: 'bold'}}>You got {points} point{points !== 1 ? 's' : ''}.</p>
                     <button onClick={start}>Click to Play Again</button>
-                </>
+                </div>
             )}
         </div>
     );    
