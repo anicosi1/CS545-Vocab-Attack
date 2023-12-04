@@ -135,8 +135,8 @@ const Game = function() {
             )}
             {gameState === "over" && (
                 <div className="start-end-screen">
-                    <p className='prompt-text'>Game Over</p>
-                    <p className='hint-text' style={{ fontWeight: 'bold'}}>You got {points} point{points !== 1 ? 's' : ''}.</p>
+                    <p className='prompt-text' style={{fontStyle: 'normal'}}>Game Over</p>
+                    <p className='hint-text' style={{ fontWeight: 'bold', fontStyle: 'normal'}}>You got {points} point{points !== 1 ? 's' : ''}.</p>
                     <button onClick={start}>Click to Play Again</button>
                 </div>
             )}
