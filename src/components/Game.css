@@ -1,0 +1,47 @@
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.game-container > * {
+    margin: 10px 0;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prompt-text {
+    font-style: italic;
+    font-weight: bolder;
+}
+  
+.button {
+    margin: 10px 5px;
+    border-radius: 10px;
+    border: none;
+    padding: 15px 32px;
+}
+
+.submit-button {
+    background-color: rgb(114, 173, 114);
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: rgb(93, 142, 93);
+}
+
+.hint-button {
+    background-color: lightgrey;
+    color: black;
+}
+
+.hint-button:hover {
+    background-color: rgb(180, 180, 180);
+}
