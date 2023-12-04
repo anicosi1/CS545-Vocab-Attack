@@ -91,7 +91,7 @@ const Game = function() {
                 <label>Word: </label>
                 <input id="userInput"></input>
                 <button onClick={handleInput}>Submit</button>
-                <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>
+                {!hint && <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>}
                 <p>Points: {points}</p>
                 {hint && <p>Hint: A synonym for the word is {prompts[prompt].hint}</p>}
                 {input !== '' && correct && <p>Correct</p>}
