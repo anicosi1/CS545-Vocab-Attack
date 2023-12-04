@@ -1,40 +1,132 @@
-.game-container {
+body, html, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    align-items: center;
 }
 
-.game-container > * {
-    margin: 10px 0;
-}
-
-.input-group {
+/* Status Information Styling */
+.status-information {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: lightgrey;
+    border-radius: 5px;
+    height: 30px;
+    overflow: hidden;
+    transition: height 0.5s;
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar-filler {
+    height: 100%;
+    background-color: green;
+    transition: background-color 0.5s, width 0.5s;
+    border-radius: 5px;
+}
+
+.progress-bar-filler-incorrect {
+    background-color: red;
+}
+
+.progress-bar-filler-hint {
+    background-color: rgb(0, 71, 0);
+}
+
+.progress-bar-enlarged {
+    height: 40px;
+}
+
+.progress-bar-wrapper {
+    width: 50%;
+    position: relative;
+    margin: 0 auto;
+}
+
+.time-left {
+    position: absolute;
+    left: 10px;
+    z-index: 2;
+    margin: 0;
+    color: white;
+}
+
+.points-text {
+    font-weight: bold;
+}
+
+/* Prompt & Hint Styling */
+.display-text-group {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
 }
 
 .prompt-text {
     font-style: italic;
     font-weight: bolder;
+    font-size: x-large;
+    margin: 0;
+    padding: 10;
 }
-  
-.button {
+
+.hint-text {
+    font-style: italic;
+    color: darkgrey;
+}
+
+/* Input Styling */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.text-input {
+    color: darkgrey;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background-color: lightgrey;
+}
+ 
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+button {
     margin: 10px 5px;
     border-radius: 10px;
     border: none;
     padding: 15px 32px;
+    font-weight: bolder;
+    background-color: green;
+    color: white;
+}
+
+button:hover {
+    background-color: rgb(0, 71, 0);
 }
 
 .submit-button {
-    background-color: rgb(114, 173, 114);
+    background-color: green;
     color: white;
 }
 
 .submit-button:hover {
-    background-color: rgb(93, 142, 93);
+    background-color: rgb(0, 71, 0);
 }
 
 .hint-button {

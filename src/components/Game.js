@@ -24,7 +24,7 @@ const Game = function() {
     //Contains some index within the list of prompts
     const [prompt, setPrompt] = useState(Math.floor(Math.random() * prompts.length))
     //Boolean dependent on if the user got the answer right or not
-    const [timer, setTimer] = useState(timeLimit)
+    const [timer, setTimer] = useState(timeLimit * 1000)
     //State of the game (new, running, over)
     const [gameState, setGameState] = useState("new")
     //Boolean for whether or not to show the hint
@@ -71,14 +71,14 @@ const Game = function() {
         if(!hint){
             setTimer(timer-hintPenalty)
             setHint(true)
-            setFeedbackMessage(null);
+            setFeedbackMessage('hint');
         }
     }
 
     //Decrement the timer every second
     useEffect(() => {
         if(timer>0 && gameState==="running"){
-            let updateTime = setInterval(function(){setTimer(timer-1)}, 1000);
+            let updateTime = setInterval(function(){setTimer(timer-0.05)}, 50);
             return function(){clearInterval(updateTime)}
         }
         else if(timer<1){
@@ -97,28 +97,47 @@ const Game = function() {
     return (
         <div className="game-container">
             {gameState === "running" && (
-                <>
-                    <p className="prompt-text">"{prompts[prompt].definition}"</p>
-                    <p className={`time-left ${hint ? 'penalty' : ''}`}>Time Left: {timer}</p>
-                    <div className="input-group">
-                        <label>Word: </label>
-                        <input id="userInput" className="text-input" />
-                        <button className="button submit-button" onClick={handleInput}>Submit</button>
-                        {!hint && <button className="button hint-button" onClick={showHint}>Hint ({hintPenalty} second penalty)</button>}
+                <>  
+                    <div className = "status-information">
+                        <div className="progress-bar-wrapper">
+                            <div className={`progress-bar ${feedbackMessage !== null ? 'progress-bar-enlarged' : ''}`}>
+                                <p className={`time-left ${hint ? 'penalty' : ''}`}>{Math.floor(timer)}</p>
+                                <div className={`progress-bar-filler ${feedbackMessage === 'incorrect' ? 'progress-bar-filler-incorrect' : feedbackMessage === 'hint' ? 'progress-bar-filler-hint' : ''}`} style={{ width: `${(timer / timeLimit) * 100}%` }}></div>
+                            </div>
+                        </div>
+                        <p className="points-text">Points: {points}</p>
                     </div>
-                    <p>Points: {points}</p>
-                    {hint && <p>Hint: A synonym for the word is {prompts[prompt].hint}</p>}
-                    {input !== '' && feedbackMessage === 'correct' && <p>Correct</p>}
-                    {input !== '' && feedbackMessage === 'incorrect' && <p>Incorrect (-{wrongPenalty} seconds)</p>}
+
+                    <div className='display-text-group'>
+                        <p className="prompt-text">"{prompts[prompt].definition}"</p>
+                        {hint && <p className="hint-text">Hint: A synonym for the word is {prompts[prompt].hint}</p>}
+                    </div>
+
+                    <div className="input-group">
+                        {input !== '' && feedbackMessage === 'correct' && <p>Correct</p>}
+                        {input !== '' && feedbackMessage === 'incorrect' && <p>Incorrect (-{wrongPenalty} seconds)</p>}
+                        <input id="userInput" className="text-input" placeholder='Enter guess'/>
+                        <div className="button-group">
+                            <button className="button submit-button" onClick={handleInput}>Submit</button>
+                            {!hint && <button className="button hint-button" onClick={showHint}>Hint ({hintPenalty} second penalty)</button>}
+                        </div>
+                    </div>
                 </>
             )}
             {gameState === "new" && (
+                <>
+                <p className='prompt-text'>Country Conjecture</p>
+                <p className='hint-text'>Guess as many words as you can in 60 seconds, based on the definitions</p>
+                <p className='hint-text'>If you: </p>
+                <p className='hint-text'>Guess incorrectly: </p>
+                <p className='hint-text'>Use a hint:</p>
                 <button onClick={start}>Click to Start</button>
+                </>
             )}
             {gameState === "over" && (
                 <>
-                    <p>Game Over</p>
-                    <p>You got {points} point{points !== 1 ? 's' : ''}.</p>
+                    <p className='prompt-text'>Game Over</p>
+                    <p className='hint-text'>You got {points} point{points !== 1 ? 's' : ''}.</p>
                     <button onClick={start}>Click to Play Again</button>
                 </>
             )}
