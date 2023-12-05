@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import './Game.css';
 
 const Game = function() {
 
@@ -23,13 +24,14 @@ const Game = function() {
     //Contains some index within the list of prompts
     const [prompt, setPrompt] = useState(Math.floor(Math.random() * prompts.length))
     //Boolean dependent on if the user got the answer right or not
-    const [correct, setCorrect] = useState(false)
-    const [timer, setTimer] = useState(timeLimit)
+    const [timer, setTimer] = useState(timeLimit * 1000)
     //State of the game (new, running, over)
     const [gameState, setGameState] = useState("new")
     //Boolean for whether or not to show the hint
     const [hint, setHint] = useState(false)
     const [points, setPoints] = useState(0)
+    //Boolean for showing messages
+    const [feedbackMessage, setFeedbackMessage] = useState(null);
 
     const start = function() {
         setGameState("running")
@@ -38,13 +40,13 @@ const Game = function() {
         setHint(false)
         setInput('')
         setPoints(0)
+        setFeedbackMessage(null)
     }
 
     const handleInput = function() {
         let guess = document.getElementById("userInput").value.trim()
         setInput(guess)
         document.getElementById("userInput").value = ''
-        //console.log(prompts[prompt].answer)
         
         //Upon getting the answer correct, select a new prompt
         if(guess !== '' && guess === prompts[prompt].answer){
@@ -54,28 +56,29 @@ const Game = function() {
                 newPrompt = Math.floor(Math.random() * prompts.length)
             }
             setPrompt(newPrompt)
-            setCorrect(true)
             setTimer(timeLimit)
             setHint(false)
             setPoints(points+1)
+            setFeedbackMessage('correct');
         }
-        else if(guess !== ''){
-            setTimer(timer-wrongPenalty)
-            setCorrect(false)
-        }
+        else if (guess !== '') {
+            setTimer(timer - wrongPenalty);
+            setFeedbackMessage('incorrect');
+        }        
     }
 
     const showHint = function() {
         if(!hint){
             setTimer(timer-hintPenalty)
             setHint(true)
+            setFeedbackMessage('hint');
         }
     }
 
     //Decrement the timer every second
     useEffect(() => {
         if(timer>0 && gameState==="running"){
-            let updateTime = setInterval(function(){setTimer(timer-1)}, 1000);
+            let updateTime = setInterval(function(){setTimer(timer-0.05)}, 50);
             return function(){clearInterval(updateTime)}
         }
         else if(timer<1){
@@ -83,40 +86,62 @@ const Game = function() {
         }
     }, [timer, gameState]);
 
-    if(gameState==="running"){
-        return (
-            <div>
-                <p>Definition: {prompts[prompt].definition}</p>
-                <p>Time Left: {timer}</p>
-                <label>Word: </label>
-                <input id="userInput"></input>
-                <button onClick={handleInput}>Submit</button>
-                {!hint && <button onClick={showHint}>Hint ({hintPenalty} second penalty)</button>}
-                <p>Points: {points}</p>
-                {hint && <p>Hint: A synonym for the word is {prompts[prompt].hint}</p>}
-                {input !== '' && correct && <p>Correct</p>}
-                {input !== '' && !correct && <p>Incorrect (-{wrongPenalty} seconds)</p>}
-            </div>
-        )
-    }
-    else if(gameState==="new"){
-        return (
-            <div>
-                <button onClick={start}>Click to Start</button>
-            </div>
-        )
-    }
-    else if(gameState==="over"){
-        return (
-            <div>
-                <p>Game Over</p>
-                {points !== 1 && <p>You got {points} points.</p>}
-                {points === 1 && <p>You got 1 point.</p>}
-                <button onClick={start}>Click to Play Again</button>
-            </div>
-        )
-    }
+    //Hide message after 1.5 seconds
+    useEffect(() => {
+        if (feedbackMessage) {
+            const timer = setTimeout(() => setFeedbackMessage(null), 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [feedbackMessage]);
 
-}
+    return (
+        <div className="game-container">
+            {gameState === "running" && (
+                <>  
+                    <div className = "status-information">
+                        <div className="progress-bar-wrapper">
+                            <div className={`progress-bar ${feedbackMessage !== null ? 'progress-bar-enlarged' : ''}`}>
+                                <p className={`time-left ${hint ? 'penalty' : ''}`}>{Math.floor(timer)}</p>
+                                <div className={`progress-bar-filler ${feedbackMessage === 'incorrect' ? 'progress-bar-filler-incorrect' : feedbackMessage === 'hint' ? 'progress-bar-filler-hint' : ''}`} style={{ width: `${(timer / timeLimit) * 100}%` }}></div>
+                            </div>
+                        </div>
+                        <p className="points-text">Points: {points}</p>
+                    </div>
 
-export default Game
+                    <div className='display-text-group'>
+                        <p className="prompt-text">"{prompts[prompt].definition}"</p>
+                        {hint && <p className="hint-text">Hint: A synonym for the word is {prompts[prompt].hint}</p>}
+                    </div>
+
+                    <div className="input-group">
+                        {input !== '' && feedbackMessage === 'correct' && <p>Correct</p>}
+                        {input !== '' && feedbackMessage === 'incorrect' && <p>Incorrect (-{wrongPenalty} seconds)</p>}
+                        <input id="userInput" className="text-input" placeholder='Enter guess'/>
+                        <div className="button-group">
+                            <button className="button submit-button" onClick={handleInput}>Submit</button>
+                            {!hint && <button className="button hint-button" onClick={showHint}>Hint ({hintPenalty} second penalty)</button>}
+                        </div>
+                    </div>
+                </>
+            )}
+            {gameState === "new" && (
+                <div className="start-end-screen">
+                    <p className='prompt-text' style={{fontStyle: 'normal'}}>Country Conjecture</p>
+                    <p className='hint-text' style={{ fontWeight: 'bold', fontStyle: 'normal'}}>Guess as many words as you can in {timeLimit} seconds, based on the definitions</p>
+                    <p className='hint-text'>Guess incorrectly: -{wrongPenalty}</p>
+                    <p className='hint-text'>Use a hint: -{hintPenalty}</p>
+                    <button onClick={start}>Click to Start</button>
+                </div>
+            )}
+            {gameState === "over" && (
+                <div className="start-end-screen">
+                    <p className='prompt-text' style={{fontStyle: 'normal'}}>Game Over</p>
+                    <p className='hint-text' style={{ fontWeight: 'bold', fontStyle: 'normal'}}>You got {points} point{points !== 1 ? 's' : ''}.</p>
+                    <button onClick={start}>Click to Play Again</button>
+                </div>
+            )}
+        </div>
+    );    
+};
+
+export default Game;
