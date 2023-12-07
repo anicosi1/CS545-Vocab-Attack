@@ -126,7 +126,7 @@ const Game = function() {
             )}
             {gameState === "new" && (
                 <div className="start-end-screen">
-                    <p className='prompt-text' style={{fontStyle: 'normal'}}>Country Conjecture</p>
+                    <p className='prompt-text' style={{fontStyle: 'normal'}}>Vocab Attack</p>
                     <p className='hint-text' style={{ fontWeight: 'bold', fontStyle: 'normal'}}>Guess as many words as you can in {timeLimit} seconds, based on the definitions</p>
                     <p className='hint-text'>Guess incorrectly: -{wrongPenalty}</p>
                     <p className='hint-text'>Use a hint: -{hintPenalty}</p>
