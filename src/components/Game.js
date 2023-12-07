@@ -116,7 +116,8 @@ const Game = function() {
                     <div className="input-group">
                         {input !== '' && feedbackMessage === 'correct' && <p>Correct</p>}
                         {input !== '' && feedbackMessage === 'incorrect' && <p>Incorrect (-{wrongPenalty} seconds)</p>}
-                        <input id="userInput" className="text-input" placeholder='Enter guess'/>
+                        <input id="userInput" className="text-input" placeholder='Enter guess here'/>
+                        <label for="userInput" >Type your guess and hit 'Submit'</label>
                         <div className="button-group">
                             <button className="button submit-button" onClick={handleInput}>Submit</button>
                             {!hint && <button className="button hint-button" onClick={showHint}>Hint ({hintPenalty} second penalty)</button>}
