@@ -13,7 +13,28 @@ const Game = function() {
         hint: "grassland"},
         {definition: "an area of low-lying, uncultivated ground where water collects; a bog or marsh.",
         answer: "swamp",
-        hint: "quagmire"}
+        hint: "quagmire"},
+        {definition: "a rounded mass projecting above a surface.",
+        answer: "mound",
+        hint: "pile"},
+        {definition: "a nation with its own government, occupying a particular territory.",
+        answer: "country",
+        hint: "state"},
+        {definition: "any of the world's main continuous expanses of land (Africa, Antarctica, Asia, Australia, Europe, North America, South America).",
+        answer: "continent",
+        hint: "mainland"},
+        {definition: "an area of land overgrown with dense forest and tangled vegetation, typically in the tropics.",
+        answer: "jungle",
+        hint: "tropical forest"},
+        {definition: "sharing a common border; touching.",
+        answer: "contiguous",
+        hint: "adjacent"},
+        {definition: "too poor to produce much or any vegetation.",
+        answer: "barren",
+        hint: "unproductive"},
+        {definition: "a deep gorge, typically one with a river flowing through it.",
+        answer: "canyon",
+        hint: "ravine"}
     ]
 
     let timeLimit = 60;
